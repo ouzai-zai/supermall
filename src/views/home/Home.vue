@@ -1,11 +1,16 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <home-swiper :banners="banners"></home-swiper>
-    <recommend-view :recommends='recommends'></recommend-view>
-    <feature-view></feature-view>
-    <tab-control :titles="['流行','新款','潮流']" class="tab_control" @tabClick='tabClick'></tab-control>
-    <goods-list :goods="goods[currentType].list"></goods-list>
+
+    <scroll class="content" ref="scroll" :probe-type='3' @scroll="contentScroll" :pull-up-load='true' @pullingUp='loadMore'>
+      <home-swiper :banners="banners"></home-swiper>
+      <recommend-view :recommends='recommends'></recommend-view>
+      <feature-view></feature-view>
+      <tab-control :titles="['流行','新款','潮流']" class="tab_control" @tabClick='tabClick'></tab-control>
+      <goods-list :goods="goods[currentType].list"></goods-list>
+    </scroll>
+
+    <back-top @click.native="BackClick" v-show="isShowBackTop"></back-top>
 
   </div>
 </template>
@@ -20,6 +25,8 @@
   import GoodsList from 'components/content/goods/GoodsList'
 
   import {getHomeMultidata, getHomeGoods} from 'network/home'
+  import Scroll from "components/common/scroll/Scroll"
+  import BackTop from 'components/content/backTop/BackTop.vue'
   
   export default {
     name:"Home",
@@ -32,7 +39,8 @@
           'new': {page: 0, list:[]},
           'sell': {page: 0, list:[]},
         },
-        currentType: 'pop'
+        currentType: 'pop',
+        isShowBackTop: false
       };
     },
 
@@ -43,6 +51,8 @@
       FeatureView,
       TabControl,
       GoodsList,
+      Scroll,
+      BackTop,
     },
     created (){
       // 获取多个数据
@@ -70,7 +80,16 @@
             break
         }
       },
-
+      BackClick() {
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      contentScroll(position) {
+        // console.log(-position.y);
+        this.isShowBackTop = (-position.y) > 542
+      },
+      loadMore() {
+        this.getHomeGoods(this.currentType)
+      },
 
 
       // 网络请求相关方法
@@ -83,9 +102,11 @@
       getHomeGoods(type) {
         const page = this.goods[type].page + 1
         getHomeGoods(type, page).then(res => {
-          console.log(res);
+          // console.log(res);
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
+
+          this.$refs.scroll.finishPullUp()
       })
       },
 
@@ -105,5 +126,9 @@
     position: sticky;
     top: 44px;
     z-index: 9;
+  }
+  .content {
+    height: calc(100vh - 93px);
+    overflow: hidden;
   }
 </style>

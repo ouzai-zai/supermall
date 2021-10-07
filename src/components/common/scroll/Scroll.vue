@@ -35,16 +35,20 @@
         // observeDOM: true
       })
       // 2.监听滚动的位置
-      this.scroll.on('scroll', (position) => {
+      if (this.probeType === 2 || this.probeType === 3) {
+        this.scroll.on('scroll', (position) => {
         // console.log(position);
         this.$emit('scroll', position);
-      })
+        })
+      }
       // console.log(this.scroll);
       this.scroll.refresh()
       // 3.监听上拉事件
-      this.scroll.on('pullingUp', () => {
+      if (this.pullUpLoad) {
+        this.scroll.on('pullingUp', () => {
         this.$emit('pullingUp');
-      })
+        })
+      }
       
     },
 
@@ -57,7 +61,7 @@
         this.scroll && this.scroll.scrollTo(x, y, time=1500)
       },
       finishPullUp() {
-        this.scroll.finishPullUp()
+        this.scroll && this.scroll.finishPullUp()
       },
       refresh() {
         console.log('aaaaa');

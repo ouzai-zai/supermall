@@ -6,7 +6,7 @@
       <home-swiper :banners="banners"></home-swiper>
       <recommend-view :recommends='recommends'></recommend-view>
       <feature-view></feature-view>
-      <tab-control :titles="['流行','新款','潮流']" class="tab_control" @tabClick='tabClick'></tab-control>
+      <tab-control :titles="['流行','新款','潮流']" @tabClick='tabClick' ref="tabControl"></tab-control>
       <goods-list :goods="goods[currentType].list"></goods-list>
     </scroll>
 
@@ -27,6 +27,7 @@
   import {getHomeMultidata, getHomeGoods} from 'network/home'
   import Scroll from "components/common/scroll/Scroll"
   import BackTop from 'components/content/backTop/BackTop.vue'
+  import {debounce} from 'components/common/utils'
   
   export default {
     name:"Home",
@@ -40,7 +41,8 @@
           'sell': {page: 0, list:[]},
         },
         currentType: 'pop',
-        isShowBackTop: false
+        isShowBackTop: false,
+        tobOffsetTop: 0
       };
     },
 
@@ -62,27 +64,30 @@
       this.getHomeGoods('pop')
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
+
+       
     },
-    mounted() {       //mounted在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
-      // 3.监听item中的图片加载完成
-      const refresh = this.debounce(this.$refs.scroll.refresh, 50)
+    mounted() {       
+      //mounted在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+      // 1.监听item中的图片加载完成
+      const refresh = debounce(this.$refs.scroll.refresh, 50)
 
       this.$bus.$on('itemImageLoad', () => {
         refresh()
       })
+      // 2.获取tabControl的offsetTop
+      // 所有组件都有一个属性$el: 用于获取组件中的元素
+      // this.tabOffsetTop = this.$refs.TabControl.$el.tobOffsetTop
+
+      setTimeout(() => {
+        console.log(this.$refs.tabControl.$el.offsetTop);
+        
+      }, 1000);
     },
     
     methods: {
       // 事件监听方法
-      debounce(func,delay) {
-        let time = null
-        return function (...args) {
-          if (time) clearTimeout(time)
-          time = setTimeout(() => {
-            func.apply(this, args)
-          }, delay);
-        }
-      },
+      
       tabClick(index) {
         switch(index) {
           case 0:
@@ -122,6 +127,7 @@
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
 
+          // 完成了上拉加载更多
           this.$refs.scroll.finishPullUp()
       })
       },
@@ -136,11 +142,6 @@
     font-size: 23px;
     position: sticky;
     top: 0;
-    z-index: 9;
-  }
-  .tab_control {
-    position: sticky;
-    top: 44px;
     z-index: 9;
   }
   .content {

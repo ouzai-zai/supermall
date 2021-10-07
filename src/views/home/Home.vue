@@ -54,7 +54,7 @@
       Scroll,
       BackTop,
     },
-    created (){
+    created (){       //created 在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图
       // 获取多个数据
       this.getHomeMultidata()
 
@@ -63,10 +63,26 @@
       this.getHomeGoods('new')
       this.getHomeGoods('sell')
     },
-      
+    mounted() {       //mounted在模板渲染成html后调用，通常是初始化页面完成后，再对html的dom节点进行一些需要的操作。
+      // 3.监听item中的图片加载完成
+      const refresh = this.debounce(this.$refs.scroll.refresh, 50)
+
+      this.$bus.$on('itemImageLoad', () => {
+        refresh()
+      })
+    },
     
     methods: {
       // 事件监听方法
+      debounce(func,delay) {
+        let time = null
+        return function (...args) {
+          if (time) clearTimeout(time)
+          time = setTimeout(() => {
+            func.apply(this, args)
+          }, delay);
+        }
+      },
       tabClick(index) {
         switch(index) {
           case 0:

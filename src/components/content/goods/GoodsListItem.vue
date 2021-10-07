@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="goodsItem.show.img" alt="" @load="imgageLoad">
     <div class="goods-info">
       <p>商品:{{goodsItem.title}}</p>
       <span class="price">价格:{{goodsItem.price}}</span>
@@ -20,7 +20,7 @@
         default() {
           return []
         }
-      }
+      },
     },
     data () {
       return {
@@ -32,31 +32,14 @@
 
     computed: {},
 
-    methods: {}
+    methods: {
+      imgageLoad() {
+        this.$bus.$emit('itemImageLoad')
+      }
+    }
   }
 </script>
 <style lang='css' scoped>
-  /* .goods-list-item {
-    font-size: 14px;
-    width: 210px;
-    float: left;
-    padding-top: 10px;
-  }
-  .goods-list-item > img {
-    width: 200px;
-    height: 250px;
-  }
-  span {
-    display: block;
-    padding-top: 10px;
-  }
-  .price_btn{
-    width: 50px;
-    height: 20px;
-    position: absolute;
-    margin-top: -19px;
-    margin-left: 111px;
-  } */
   .goods-item {
     padding-bottom: 40px;
     position: relative;

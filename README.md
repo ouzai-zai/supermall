@@ -44,11 +44,25 @@ typora-root-url: README.assets
 
 7.v-bind：动态绑定url地址，<img v-bind:src"url" />,简写：“:”
 
-8.v-bind：动态绑定class类名，<h2 v-bind:class="{类名：true（为true则为这个类名) ，类名：flase（为flase则不为这个类名)}">{{message}}</h2>，一般不写在html里，写在data里定义一个属性，值为true/false，然后将属性名写在html中的true/false上
+8.v-bind：动态绑定class类名，
 
-9.v-bind：动态绑定style（对象语法），<h2 :style='{key（属性名):value（属性值)}'>{{message}}</h2>
+```vue
+<h2 v-bind:class="{类名：true（为true则为这个类名) ，类名：flase（为flase则不为这个类名)}">{{message}}</h2>
+```
 
-10.v-bind：动态绑定style（数组语法）<h2 :style="[bStyle,bStyle1]">{{message}}</h2> bStyle为data里设置的变量
+一般不写在html里，写在data里定义一个属性，值为true/false，然后将属性名写在html中的true/false上
+
+9.v-bind：动态绑定style（对象语法）
+
+```vue
+<h2 :style='{key（属性名):value（属性值)}'>{{message}}</h2>
+```
+
+10.v-bind：动态绑定style（数组语法）,bStyle为data里设置的变量
+
+```vue
+<h2 :style="[bStyle,bStyle1]">{{message}}</h2>
+```
 
 11.计算属性computed：和data同级，也是写函数在里面，调用的时候不需要（)，methods里写的函数调用需要加（)
 

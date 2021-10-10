@@ -1,6 +1,6 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav"></detail-nav-bar>
+    <detail-nav-bar class="detail-nav" @titleClick></detail-nav-bar>
     <scroll class="content" ref="scroll">
       <detail-swiper :top-images='topImages'></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
@@ -26,7 +26,6 @@
   import Scroll from 'components/common/scroll/Scroll'
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail'
-  import {debounce} from 'components/common/utils.js';
   import {itemListenerMixin} from 'common/mixin'
 
 

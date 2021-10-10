@@ -21,4 +21,4 @@ import MainTabBar from 'components/content/mainTabbar/MainTabBar.vue'
   @import "assets/css/base.css";
 </style>
 
-//  188总结，可以直接看189
+//  208

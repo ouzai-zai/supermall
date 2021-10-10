@@ -28,6 +28,7 @@
   import Scroll from "components/common/scroll/Scroll"
   import BackTop from 'components/content/backTop/BackTop.vue'
   import {debounce} from 'components/common/utils'
+  import {itemListenerMixin} from 'common/mixin'
   
   export default {
     name:"Home",
@@ -44,7 +45,7 @@
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
-        saveY: 0
+        saveY: 0,
       };
     },
 
@@ -58,6 +59,7 @@
       Scroll,
       BackTop,
     },
+    mixins: [itemListenerMixin],
     computed: {
       activated () {
         this.$refs.scroll.scrollTo(0, this.saveY, 0)
@@ -65,6 +67,8 @@
       },
       deactivated () {
         this.saveY = this.$refs.scroll.getScrollY()
+
+        this.$bus.$off('itemImgLoad', this.itemImgListener)
       }
     },
     created (){       //created 在模板渲染成html前调用，即通常初始化某些属性值，然后再渲染成视图
@@ -83,9 +87,12 @@
       // 1.监听item中的图片加载完成
       const refresh = debounce(this.$refs.scroll.refresh, 50)
 
-      this.$bus.$on('itemImageLoad', () => {
+
+      // 对监听的事件进行保存
+      this.itemImgListener = () => {
         refresh()
-      })
+      }
+      this.$bus.$on('itemImageLoad', this.itemImgListener)
       // 2.获取tabControl的offsetTop
       // 所有组件都有一个属性$el: 用于获取组件中的元素
       // this.tabOffsetTop = this.$refs.TabControl.$el.tobOffsetTop

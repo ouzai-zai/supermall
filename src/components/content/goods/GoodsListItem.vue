@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick ">
-    <img :src="goodsItem.show.img" alt="" @load="imgageLoad">
+    <img :src="showImage" alt="" @load="imgageLoad">
     <div class="goods-info">
       <p>商品:{{goodsItem.title}}</p>
       <span class="price">价格:{{goodsItem.price}}</span>
@@ -30,7 +30,11 @@
 
     components: {},
 
-    computed: {},
+    computed: {
+      showImage() {
+        return this.goodsItem.img || this.goodsItem.image || this.goodsItem.show.img
+      }
+    },
 
     methods: {
       imgageLoad() {

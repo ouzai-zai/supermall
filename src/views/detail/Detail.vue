@@ -1,14 +1,14 @@
 <template>
   <div id="detail">
-    <detail-nav-bar class="detail-nav" @titleClick></detail-nav-bar>
-    <scroll class="content" ref="scroll">
+    <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="nav"></detail-nav-bar>
+    <scroll class="content" ref="scroll" @scroll="contentScroll" :probe-type='3'>
       <detail-swiper :top-images='topImages'></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop='shop'></detail-shop-info>
       <detail-goods-info :detail-info='detailInfo' @imageLoad='imageLoad'></detail-goods-info>
-      <detail-param-info :param-info='paramInfo'></detail-param-info>
-      <detail-comment-info :comment-info='commentInfo'></detail-comment-info>
-      <goods-list :goods='recommends'></goods-list>
+      <detail-param-info :param-info='paramInfo' ref="params"></detail-param-info>
+      <detail-comment-info :comment-info='commentInfo' ref="comment"></detail-comment-info>
+      <goods-list :goods='recommends' ref="recommend"></goods-list>
     </scroll>
   </div>
 </template>
@@ -26,6 +26,7 @@
   import Scroll from 'components/common/scroll/Scroll'
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail'
+  import {debounce} from 'components/common/utils.js'
   import {itemListenerMixin} from 'common/mixin'
 
 
@@ -41,6 +42,9 @@
         paramInfo: {},
         commentInfo: {},
         recommends: [],
+        themeTopYs: [],
+        getThemeTopY: null,
+        currentIndex: 0
       };
     },
     created () {
@@ -65,16 +69,28 @@
         if (data.rate.cRate !==0) {
           this.commentInfo = data.rate.list[0]
         }
+        
       })
       // 请求推荐数据
       getRecommend().then(res => {
         console.log(res);
         this.recommends = res.data.list
       })
+
+      // 给getThemmeTopY赋值
+      this.getThemeTopY = debounce(() => {
+        this.themeTopYs=[]
+
+        this.themeTopYs.push(0)
+        this.themeTopYs.push(this.$refs.params.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.comment.$el.offsetTop)
+        this.themeTopYs.push(this.$refs.recommend.$el.offsetTop)
+
+        console.log(this.themeTopYs);
+      })
     },
-    mounted () {
-      
-    },
+    mounted () {},
+    updated () {},
     destroyed () {
       this.$bus.$off('itemImgLoad', this.itemImagListener)
     },
@@ -97,6 +113,27 @@
     methods: {
       imageLoad() {
         this.$refs.scroll.refresh()
+
+        this.getThemeTopY()
+      },
+      titleClick(index) {
+        // console.log(index);
+        this.$refs.scroll.scrollTo(0, -this.themeTopYs[index], 1000)
+      },
+      contentScroll(position) {
+        const positionY = -position.y
+        
+        let length = this.themeTopYs.length
+        for(let i = 0; i < length; i++) {
+          // if (positionY > this.themeTopYs[parseInt(i)] && positionY < this.themeTopYs[i+1]) {
+          //   console.log(i);
+          // }
+          if (this.currentIndex !== i && ((i < length - 1 && positionY >= this.themeTopYs[i] && positionY < this.themeTopYs[i+1]) || (i === length - 1 && positionY >= this.themeTopYs[i]))) {
+            this.currentIndex = i
+            console.log(this.currentIndex);
+            this.$refs.nav.currentIndex = this.currentIndex
+          }
+        }
       }
     }
   }

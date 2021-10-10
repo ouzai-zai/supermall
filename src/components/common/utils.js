@@ -1,7 +1,7 @@
 /**
  * 防抖函数 , 防抖函数只执行一次，后面执行的都是其返回的函数
  */
-export function debounce(func,delay) {
+export function debounce(func,delay=50) {
   let time = null
   return function (...args) {
     if (time) clearTimeout(time)

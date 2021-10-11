@@ -15,7 +15,7 @@
       </div>
     </div>
     <div class="bottom_right">
-      <div class="cart">
+      <div class="cart" @click="addToCart">
         加入购物车
       </div>
       <div class="buy">
@@ -38,16 +38,20 @@
 
     computed: {},
 
-    methods: {}
+    methods: {
+      addToCart() {
+        this.$emit('addCart')
+      }
+    }
   }
 </script>
 <style lang='css' scoped>
   .bottom-bar {
   font-size: 0.65rem;
   display: flex;
-  position: fixed;
+  position: absolute;
   background-color: #fff;
-  bottom: 0px;
+  bottom: -30px;
   left: 0;
   right: 0;
   height: 2.09rem;

@@ -2,6 +2,11 @@
   <div id="detail">
     <detail-nav-bar class="detail-nav" @titleClick='titleClick' ref="nav"></detail-nav-bar>
     <scroll class="content" ref="scroll" @scroll="contentScroll" :probe-type='3'>
+      <ul>
+        <li v-for="item in $store.state.cartList">
+          {{item}}
+        </li>
+      </ul>
       <detail-swiper :top-images='topImages'></detail-swiper>
       <detail-base-info :goods="goods"></detail-base-info>
       <detail-shop-info :shop='shop'></detail-shop-info>
@@ -10,7 +15,8 @@
       <detail-comment-info :comment-info='commentInfo' ref="comment"></detail-comment-info>
       <goods-list :goods='recommends' ref="recommend"></goods-list>
     </scroll>
-    <detail-bottom-bar></detail-bottom-bar>
+    <detail-bottom-bar @addCart='addToCart'></detail-bottom-bar>
+    <back-top @click.native="BackClick" v-show="isShowBackTop"></back-top>
   </div>
 </template>
 
@@ -24,13 +30,15 @@
   import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
   import GoodsList from 'components/content/goods/GoodsList.vue'
   import DetailBottomBar from './childComps/DetailBottomBar.vue'
+  import BackTop from 'components/content/backTop/BackTop.vue'
 
   import Scroll from 'components/common/scroll/Scroll'
 
   import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail'
   import {debounce} from 'components/common/utils.js'
   import {itemListenerMixin} from 'common/mixin'
-
+  import {BACK_POSITION} from 'common/const'
+ 
 
   export default {
     name:"Detail",
@@ -46,7 +54,8 @@
         recommends: [],
         themeTopYs: [],
         getThemeTopY: null,
-        currentIndex: 0
+        currentIndex: 0,
+        isShowBackTop: false,
       };
     },
     created () {
@@ -106,6 +115,7 @@
       DetailParamInfo,
       DetailCommentInfo,
       DetailBottomBar,
+      BackTop,
       Scroll,
       GoodsList,
     },
@@ -137,6 +147,23 @@
             this.$refs.nav.currentIndex = this.currentIndex
           }
         }
+        // 是否显示回到顶部
+        this.isShowBackTop = -position.y > BACK_POSITION
+      },
+      BackClick() {
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      addToCart() {
+        // 1.获取商品信息
+        const product = {}
+        product.image = this.topImages[0]
+        product.title = this.goods.title
+        product.desc = this.goods.desc
+        product.price = this.goods.realPrice
+        product.iid = this.iid
+        // 2.将商品添加到购物车
+        // this.$store.commit('addCart', product)
+        this. $store.dispatch('addCart', product)
       }
     }
   }

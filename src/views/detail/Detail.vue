@@ -10,6 +10,7 @@
       <detail-comment-info :comment-info='commentInfo' ref="comment"></detail-comment-info>
       <goods-list :goods='recommends' ref="recommend"></goods-list>
     </scroll>
+    <detail-bottom-bar></detail-bottom-bar>
   </div>
 </template>
 
@@ -22,6 +23,7 @@
   import DetailParamInfo from './childComps/DetailParamInfo.vue'
   import DetailCommentInfo from './childComps/DetailCommentInfo.vue'
   import GoodsList from 'components/content/goods/GoodsList.vue'
+  import DetailBottomBar from './childComps/DetailBottomBar.vue'
 
   import Scroll from 'components/common/scroll/Scroll'
 
@@ -100,10 +102,11 @@
       DetailSwiper,
       DetailBaseInfo,
       DetailShopInfo,
-      Scroll,
       DetailGoodsInfo,
       DetailParamInfo,
       DetailCommentInfo,
+      DetailBottomBar,
+      Scroll,
       GoodsList,
     },
     mixins: [itemListenerMixin],
@@ -145,7 +148,7 @@
     background-color: #fff;
   }
   .content {
-    height: calc(100vh - 44px);
+    height: calc(100vh - 44px - 30px);
   }
   .detail-nav {
     position: relative;

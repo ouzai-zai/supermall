@@ -1,14 +1,14 @@
 <template>
   <div id="detail_goods_info" v-if="Object.keys(detailInfo).length != 0">
     <div class="goods_info_desc">
-      <div style="float: left;" class="desc_line">
+      <div style="float: left" class="desc_line">
         <i class="desc_dot"></i>
       </div>
       <div class="desc_text">
         {{ detailInfo.desc }}
       </div>
-      <div style="float: right;" class="desc_line">
-        <i style="right: 0px;" class="desc_dot"></i>
+      <div style="float: right" class="desc_line">
+        <i style="right: 0px" class="desc_dot"></i>
       </div>
     </div>
     <div class="goods_info_key">
@@ -32,26 +32,25 @@ export default {
       type: Object,
       default() {
         return {};
-      }
-    }
+      },
+    },
   },
   data() {
     return {
       counter: 0,
-      imagesLength: 0
-    }
+      imagesLength: 0,
+    };
   },
   methods: {
     imageLoad() {
-      if (++this.counter === this.imagesLength)
-      this.$emit("imageLoad");
-    }
+      if (++this.counter === this.imagesLength) this.$emit("imageLoad");
+    },
   },
   watch: {
     detailInfo() {
-      this.imagesLength = this.detailInfo.detailImage[0].list.length
-    }
-  }
+      this.imagesLength = this.detailInfo.detailImage[0].list.length;
+    },
+  },
 };
 </script>
 <style scoped>
@@ -84,7 +83,12 @@ export default {
 .goods_info_key {
   padding: 0.42rem 0.34rem;
 }
+.goods_info_imgs {
+  width: 325px;
+  margin: 0 auto;
+}
 .goods_info_imgs img {
   width: 100%;
+  margin: 5px 0;
 }
 </style>

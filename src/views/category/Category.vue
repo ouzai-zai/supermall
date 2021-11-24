@@ -121,7 +121,7 @@
         pullUpLoad: true
       })
       this.scroll.on('scroll', (position) => {
-        console.log(position);
+        // console.log(position);
       })
       this.scroll.on('pullingUp', () => {
         console.log('啦啦啦啦啦啦');

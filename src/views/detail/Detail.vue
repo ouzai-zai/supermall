@@ -172,7 +172,8 @@
     background-color: #fff;
   }
   .content {
-    height: calc(100vh - 44px - 30px);
+    height: calc(100vh - 44px - 2.6rem);
+    overflow: hidden;
   }
   .detail-nav {
     position: relative;

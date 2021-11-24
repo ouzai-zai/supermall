@@ -51,10 +51,10 @@
   display: flex;
   position: absolute;
   background-color: #fff;
-  bottom: -30px;
+  bottom: -41px;
   left: 0;
   right: 0;
-  height: 2.09rem;
+  height: 2.6rem;
   text-align: center;
   box-shadow: 0 -0.04rem 0.4rem gray;
 }
@@ -71,7 +71,7 @@
   background: url("~assets/img/detail/detail_bottom.png") 0 0/100%;
   width: 1rem;
   height: 1rem;
-  margin: 0.12rem auto;
+  margin: 0.34rem auto;
 }
 .service .icon {
   background-position: 0 -2.4rem;
@@ -85,7 +85,7 @@
 }
 .bottom_right > div {
   flex: 1;
-  line-height: 2.09rem;
+  line-height: 2.6rem;
 }
 .cart {
   background-color: rgb(255, 174, 0);

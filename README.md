@@ -1489,35 +1489,4 @@ const [name] = axios.create({
       </script>
       ```
 
-   2. 
-
-# 项目实操
-
-新项目：
-
-1. 划分目录结构
-
-   - assets
-
-     - css
-
-       - base.css
-
-       - normalize.css
-
-     - img
-   - common
-   - components
-     - common
-     - content
-   - network
-   - router
-   - store
-   - views
-2. 引用来个css文件base.css，normalize.css
-3. vue.config.js和.editorconfig
-
-146 axios
-
-162
-
+      

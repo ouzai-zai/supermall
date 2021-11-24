@@ -20,5 +20,3 @@ import MainTabBar from 'components/content/mainTabbar/MainTabBar.vue'
 <style>
   @import "assets/css/base.css";
 </style>
-
-//  223
